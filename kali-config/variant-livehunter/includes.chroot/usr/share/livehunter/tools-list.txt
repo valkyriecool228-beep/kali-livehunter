@@ -1,0 +1,55 @@
+=== Kali LiveHunter — установленные инструменты ===
+
+[Приватность / анонимность / OPSEC]
+tor                  — Tor-сеть (systemd-сервис livehunter-tor)
+torsocks             — проксирование трафика приложений через Tor
+proxychains4         — цепочки прокси
+macchanger           — смена MAC-адреса
+bleachbit            — очистка следов активности
+keepassxc            — менеджер паролей
+gnupg                — шифрование/подписи
+
+[OSINT / Recon]
+theharvester         — сбор email/поддоменов/имён из открытых источников
+spiderfoot           — автоматизированный OSINT-фреймворк
+recon-ng             — модульный recon-фреймворк
+subfinder            — поиск поддоменов (Go, ProjectDiscovery)
+httpx                — HTTP-пробинг (Go, ProjectDiscovery)
+naabu                — быстрый сканер портов (Go, ProjectDiscovery)
+nuclei               — сканер уязвимостей по шаблонам (Go, ProjectDiscovery)
+photon               — веб-краулер для OSINT (photon-crawler)
+sherlock             — поиск username в соцсетях (sherlock-project)
+holehe               — проверка email на регистрации в сервисах
+
+[Эксплуатация]
+routersploit         — фреймворк эксплойтов для роутеров/IoT (/opt/routersploit)
+
+[Реверс-инжиниринг]
+ghidra               — дизассемблер/декомпилятор
+GhidraMCP            — MCP-интеграция для Ghidra (/opt/ghidra-mcp)
+
+[Mobile / Android]
+Android-PIN-Bruteforce — брутфорс PIN-кода Android (/opt/android-pin-bruteforce)
+
+[Криптография / прочее]
+cryptsetup           — шифрование дисков
+age                   — современное файловое шифрование
+DracoLure            — (/opt/dracolure)
+RS-Key               — прошивка аппаратного security-key (/opt/rs-key)
+
+[Сетевой анализ]
+wireshark            — анализатор трафика (GUI)
+tshark               — анализатор трафика (CLI)
+
+[Безопасность системы]
+selinux-basics, selinux-policy-default, policycoreutils, setools — SELinux
+iptables, iptables-persistent — файрвол / прозрачный Tor-прокси
+
+[Разработка]
+git, build-essential, python3-pip, python3-venv
+golang-go            — для сборки Go-инструментов
+cargo, rustc         — для сборки RS-Key
+vim, neovim, tmux, docker.io
+
+Полный список пакетов Kali (базовые метапакеты): kali-linux-core, kali-desktop-live,
+kali-desktop-xfce, kali-linux-default

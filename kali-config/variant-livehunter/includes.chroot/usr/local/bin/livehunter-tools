@@ -1,0 +1,16 @@
+#!/bin/bash
+# LiveHunter — показать список установленных инструментов
+LIST_FILE="/usr/share/livehunter/tools-list.txt"
+
+if [ ! -f "$LIST_FILE" ]; then
+    echo "Файл со списком инструментов не найден: $LIST_FILE"
+    exit 1
+fi
+
+if command -v bat >/dev/null 2>&1; then
+    bat --paging=always --style=plain "$LIST_FILE"
+elif command -v less >/dev/null 2>&1; then
+    less "$LIST_FILE"
+else
+    cat "$LIST_FILE"
+fi

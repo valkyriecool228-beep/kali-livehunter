@@ -1,0 +1,25 @@
+#!/bin/bash
+# LiveHunter — root-хелпер создания пользователя (запускается через pkexec)
+set -e
+
+USERNAME="$1"
+PASSWORD="$2"
+
+if [ -z "$USERNAME" ] || [ -z "$PASSWORD" ]; then
+    echo "Использование: $0 <username> <password>" >&2
+    exit 1
+fi
+
+if id "$USERNAME" >/dev/null 2>&1; then
+    echo "Пользователь $USERNAME уже существует" >&2
+    exit 2
+fi
+
+useradd -m -s /bin/bash -G sudo "$USERNAME"
+echo "${USERNAME}:${PASSWORD}" | chpasswd
+
+# Отметка, что первичная настройка выполнена (используется автозапуском мастера)
+mkdir -p /etc/livehunter
+touch /etc/livehunter/first-run-done
+
+echo "OK"

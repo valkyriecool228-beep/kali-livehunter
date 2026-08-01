@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=LiveHunter First-Run Wizard
+Comment=Создание пользователя и приветствие Kali LiveHunter
+Exec=/usr/local/bin/livehunter-user-wizard
+Icon=system-users
+Terminal=false
+X-GNOME-Autostart-enabled=true
+NoDisplay=true

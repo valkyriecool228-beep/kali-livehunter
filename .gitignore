@@ -3,7 +3,7 @@ chroot/
 cache/
 binary/
 .build/
-local/
+/local/
 config/
 images/*.iso
 images/*.log

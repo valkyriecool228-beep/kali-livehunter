@@ -1,0 +1,25 @@
+#!/bin/bash
+set -e
+
+TOR_UID=$(id -u debian-tor)
+TRANS_PORT="9040"
+DNS_PORT="5353"
+
+iptables -F
+iptables -t nat -F
+iptables -t nat -A OUTPUT -o lo -j RETURN
+iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports $DNS_PORT
+iptables -t nat -A OUTPUT -m owner --uid-owner $TOR_UID -j RETURN
+for net in 127.0.0.0/9 127.128.0.0/10 192.168.0.0/16 10.0.0.0/8 172.16.0.0/12; do
+  iptables -t nat -A OUTPUT -d $net -j RETURN
+done
+iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $TRANS_PORT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
+for net in 127.0.0.0/9 127.128.0.0/10 192.168.0.0/16 10.0.0.0/8 172.16.0.0/12; do
+  iptables -A OUTPUT -d $net -j ACCEPT
+done
+iptables -A OUTPUT -j REJECT
+
+echo "LiveHunter: Tor transparent proxy включён."

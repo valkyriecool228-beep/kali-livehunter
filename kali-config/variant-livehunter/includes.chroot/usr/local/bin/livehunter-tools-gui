@@ -1,0 +1,14 @@
+#!/bin/bash
+# LiveHunter — GUI-окно со списком установленных инструментов
+LIST_FILE="/usr/share/livehunter/tools-list.txt"
+
+if [ ! -f "$LIST_FILE" ]; then
+    zenity --error --title="LiveHunter" --text="Файл со списком инструментов не найден."
+    exit 1
+fi
+
+zenity --text-info \
+    --title="Kali LiveHunter — установленные инструменты" \
+    --filename="$LIST_FILE" \
+    --width=700 --height=600 \
+    --font="Monospace 10"

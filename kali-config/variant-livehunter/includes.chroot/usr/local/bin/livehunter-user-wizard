@@ -1,0 +1,53 @@
+#!/bin/bash
+# LiveHunter — мастер создания пользователя при первом входе
+
+MARKER="/etc/livehunter/first-run-done"
+
+# Если пользователь уже создан ранее — просто показать список тулов и выйти
+if [ -f "$MARKER" ]; then
+    exit 0
+fi
+
+zenity --info --title="Добро пожаловать в Kali LiveHunter" \
+    --text="Сейчас нужно создать основного пользователя системы.\nНажмите OK, чтобы продолжить." \
+    --width=400
+
+while true; do
+    USERNAME=$(zenity --entry --title="Kali LiveHunter — создание пользователя" \
+        --text="Введите имя пользователя (латиницей, без пробелов):")
+
+    # Отмена — прерываем мастер
+    [ -z "$USERNAME" ] && exit 1
+
+    # Проверка формата логина
+    if ! [[ "$USERNAME" =~ ^[a-z_][a-z0-9_-]{0,31}$ ]]; then
+        zenity --error --text="Некорректное имя пользователя.\nИспользуйте латиницу в нижнем регистре, цифры, - и _."
+        continue
+    fi
+
+    PASSWORD=$(zenity --password --title="Kali LiveHunter — пароль")
+    [ -z "$PASSWORD" ] && exit 1
+
+    PASSWORD_CONFIRM=$(zenity --password --title="Kali LiveHunter — подтверждение пароля")
+
+    if [ "$PASSWORD" != "$PASSWORD_CONFIRM" ]; then
+        zenity --error --text="Пароли не совпадают. Попробуйте ещё раз."
+        continue
+    fi
+
+    if [ ${#PASSWORD} -lt 8 ]; then
+        zenity --error --text="Пароль слишком короткий (минимум 8 символов)."
+        continue
+    fi
+
+    break
+done
+
+# Вызов root-хелпера через pkexec
+if pkexec /usr/local/sbin/livehunter-create-user "$USERNAME" "$PASSWORD"; then
+    zenity --info --title="Готово" \
+        --text="Пользователь $USERNAME успешно создан.\nСписок установленных инструментов откроется сейчас."
+    /usr/local/bin/livehunter-tools-gui
+else
+    zenity --error --text="Не удалось создать пользователя. Попробуйте снова после перезагрузки."
+fi
