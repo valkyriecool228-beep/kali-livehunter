@@ -25,6 +25,8 @@
 **Mobile:** Android-PIN-Bruteforce
 **Приватность:** Tor (systemd-сервис), torsocks, proxychains4, macchanger, BleachBit, KeepassXC, GnuPG
 
+See [FEATURES.md](FEATURES.md) for the complete breakdown.
+
 ## Требования к железу
 
 - **Минимум 8 ГБ RAM** — обязательно из-за RAM-only режима загрузки по умолчанию
