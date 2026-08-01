@@ -13,6 +13,17 @@
 - Автоматическая рандомизация MAC-адреса при каждом подключении
 - Набор OSINT-инструментов (theHarvester, Spiderfoot, Recon-ng)
 - Кастомный интерфейс: Plymouth-тема, GTK-тема, Rofi, Conky HUD
+- Мастер создания пользователя при первом запуске (zenity + polkit) + окно/команда со списком установленных инструментов (`livehunter-tools`)
+
+## Полный список инструментов
+
+Актуальный список — в самой системе: `/usr/share/livehunter/tools-list.txt`, или командой `livehunter-tools` в терминале.
+
+**Recon / OSINT:** subfinder, httpx, naabu, nuclei, theHarvester, SpiderFoot, recon-ng, Photon, Sherlock, holehe
+**Exploitation:** RouterSploit
+**Reverse engineering:** Ghidra + GhidraMCP
+**Mobile:** Android-PIN-Bruteforce
+**Приватность:** Tor (systemd-сервис), torsocks, proxychains4, macchanger, BleachBit, KeepassXC, GnuPG
 
 ## Требования к железу
 
