@@ -1,0 +1,35 @@
+#!/bin/bash
+set -e
+
+pip3 install --break-system-packages sherlock-project
+pip3 install --break-system-packages holehe
+
+cd /tmp
+wget -q https://launchpad.net/veracrypt/trunk/1.26.20/+download/veracrypt-console-1.26.20-Debian-12-amd64.deb -O veracrypt.deb || echo "VeraCrypt: скачивание не удалось, пропускаем"
+[ -f veracrypt.deb ] && dpkg -i veracrypt.deb || true
+apt-get install -f -y || true
+rm -f veracrypt.deb
+
+export GOPATH=/opt/go
+export PATH=$PATH:/usr/lib/go-1.21/bin:$GOPATH/bin
+go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest || echo "subfinder: не удалось установить"
+go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest || echo "httpx: не удалось установить"
+go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest || echo "nuclei: не удалось установить"
+go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest || echo "naabu: не удалось установить"
+cp $GOPATH/bin/* /usr/local/bin/ 2>/dev/null || true
+
+pip3 install --break-system-packages photon-crawler || echo "photon: не удалось установить"
+
+git clone https://github.com/threat9/routersploit /opt/routersploit || echo "routersploit: клонирование не удалось"
+pip3 install --break-system-packages -r /opt/routersploit/requirements.txt 2>/dev/null || true
+
+git clone https://github.com/urbanadventurer/Android-PIN-Bruteforce /opt/android-pin-bruteforce || echo "Android-PIN-Bruteforce: клонирование не удалось"
+chmod +x /opt/android-pin-bruteforce/android-pin-bruteforce 2>/dev/null || true
+ln -sf /opt/android-pin-bruteforce/android-pin-bruteforce /usr/local/bin/android-pin-bruteforce 2>/dev/null || true
+
+git clone https://github.com/kiurakku/DracoLure /opt/dracolure || echo "DracoLure: клонирование не удалось"
+
+git clone https://github.com/TheMaxMur/RS-Key /opt/rs-key || echo "RS-Key: клонирование не удалось"
+
+git clone https://github.com/LaurieWired/GhidraMCP /opt/ghidra-mcp || echo "GhidraMCP: клонирование не удалось"
+pip3 install --break-system-packages mcp 2>/dev/null || echo "MCP SDK: установка через pip не удалась"

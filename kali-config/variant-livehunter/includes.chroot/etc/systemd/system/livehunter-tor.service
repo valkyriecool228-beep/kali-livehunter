@@ -1,0 +1,12 @@
+[Unit]
+Description=LiveHunter Tor Transparent Proxy
+After=network.target tor.service
+Requires=tor.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/livehunter-tor-on
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

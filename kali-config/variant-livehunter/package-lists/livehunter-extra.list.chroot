@@ -1,0 +1,54 @@
+## LiveHunter — приватность, анонимность, opsec
+torsocks
+proxychains4
+macchanger
+bleachbit
+keepassxc
+gnupg
+
+## OSINT
+theharvester
+spiderfoot
+recon-ng
+
+## Разработка / opensource стек
+git
+build-essential
+python3-pip
+python3-venv
+
+## Tor transparent proxy
+tor
+iptables
+iptables-persistent
+
+## Разработка / IDE
+vim
+neovim
+tmux
+docker.io
+
+## Шифрование
+cryptsetup
+age
+
+## Сетевой анализ
+wireshark
+tshark
+
+## SELinux (безопасность/контроль доступа)
+selinux-basics
+selinux-policy-default
+policycoreutils
+setools
+
+## Для установки Go-based тулов из BlackArch-экосистемы
+golang-go
+
+## Для сборки RS-Key (аппаратный security-key firmware)
+cargo
+rustc
+
+## Ghidra + для GhidraMCP
+ghidra
+default-jdk

@@ -1,0 +1,9 @@
+PRETTY_NAME="Kali LiveHunter"
+NAME="Kali LiveHunter"
+ID=kali
+ID_LIKE=debian
+VERSION="LiveHunter"
+VERSION_ID="1.0"
+HOME_URL="https://your-project-url.example"
+SUPPORT_URL="https://your-project-url.example"
+BUG_REPORT_URL="https://your-project-url.example"
