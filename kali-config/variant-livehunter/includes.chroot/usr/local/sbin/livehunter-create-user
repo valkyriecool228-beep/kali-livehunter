@@ -1,25 +1,48 @@
 #!/bin/bash
 # LiveHunter — root-хелпер создания пользователя (запускается через pkexec)
-set -e
+
+LOGFILE="/var/log/livehunter-wizard.log"
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [create-user] $1" >> "$LOGFILE" 2>/dev/null || true
+}
 
 USERNAME="$1"
 PASSWORD="$2"
 
+if [ "$(id -u)" -ne 0 ]; then
+    log "ERROR: not running as root (uid=$(id -u))"
+    echo "Ошибка: скрипт должен выполняться с правами root" >&2
+    exit 3
+fi
+
 if [ -z "$USERNAME" ] || [ -z "$PASSWORD" ]; then
+    log "ERROR: missing username or password argument"
     echo "Использование: $0 <username> <password>" >&2
     exit 1
 fi
 
 if id "$USERNAME" >/dev/null 2>&1; then
+    log "ERROR: user $USERNAME already exists"
     echo "Пользователь $USERNAME уже существует" >&2
     exit 2
 fi
 
-useradd -m -s /bin/bash -G sudo "$USERNAME"
-echo "${USERNAME}:${PASSWORD}" | chpasswd
+if ! useradd -m -s /bin/bash -G sudo "$USERNAME" 2>>"$LOGFILE"; then
+    log "ERROR: useradd failed for $USERNAME"
+    echo "Не удалось создать пользователя (useradd failed)" >&2
+    exit 4
+fi
 
-# Отметка, что первичная настройка выполнена (используется автозапуском мастера)
+if ! echo "${USERNAME}:${PASSWORD}" | chpasswd 2>>"$LOGFILE"; then
+    log "ERROR: chpasswd failed for $USERNAME, rolling back useradd"
+    userdel -r "$USERNAME" 2>>"$LOGFILE" || true
+    echo "Не удалось установить пароль, изменения отменены" >&2
+    exit 5
+fi
+
 mkdir -p /etc/livehunter
 touch /etc/livehunter/first-run-done
 
+log "SUCCESS: user $USERNAME created"
 echo "OK"
+exit 0
