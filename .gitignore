@@ -1,0 +1,22 @@
+# Build artifacts — never commit
+chroot/
+cache/
+binary/
+.build/
+local/
+config/
+images/*.iso
+images/*.log
+*.contents
+*.files
+*.packages
+*.modified_timestamps
+*.hybrid.iso
+
+# Backups made during editing
+*.bak
+
+# Служебные логи и артефакты сборки
+build-*.log
+wget-log*
+chroot.packages.*
