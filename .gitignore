@@ -21,3 +21,4 @@ build-*.log
 wget-log*
 chroot.packages.*
 build.log
+build.log
