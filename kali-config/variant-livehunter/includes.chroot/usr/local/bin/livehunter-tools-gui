@@ -10,5 +10,4 @@ fi
 zenity --text-info \
     --title="Kali LiveHunter — установленные инструменты" \
     --filename="$LIST_FILE" \
-    --width=700 --height=600 \
     --font="Monospace 10"

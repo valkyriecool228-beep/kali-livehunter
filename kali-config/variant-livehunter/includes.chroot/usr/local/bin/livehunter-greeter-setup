@@ -21,7 +21,7 @@ COMMON_PASSWORDS="password 12345678 qwerty123 letmein admin123 password123 kali1
 
 zenity --info --title="Kali LiveHunter" \
     --text="Добро пожаловать. Перед входом в систему нужно создать пользователя." \
-    --width=420
+   
 
 while true; do
     USERNAME=$(zenity --entry --title="Kali LiveHunter — регистрация" \
@@ -81,7 +81,7 @@ if /usr/local/sbin/livehunter-create-user "$USERNAME" "$PASSWORD"; then
     log "SUCCESS: $USERNAME registered, proceeding to standard LightDM greeter"
     zenity --info --title="Готово" \
         --text="Пользователь $USERNAME создан. Сейчас откроется обычный экран входа." \
-        --width=380
+       
 else
     log "ERROR: registration failed, retrying wizard on next attempt (marker not set)"
     zenity --error --text="Не удалось создать пользователя. Экран регистрации откроется снова."
