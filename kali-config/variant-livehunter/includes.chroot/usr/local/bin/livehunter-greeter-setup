@@ -1,0 +1,91 @@
+#!/bin/bash
+# LiveHunter — запускается LightDM (greeter-setup-script) ДО экрана входа.
+# Если ни один пользователь ещё не зарегистрирован - показывает мастер
+# регистрации поверх экрана логина. После успеха обычный LightDM greeter
+# с созданным юзером показывается как в стандартном Kali.
+
+MARKER="/etc/livehunter/first-run-done"
+LOGFILE="/var/log/livehunter-wizard.log"
+
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [greeter-setup] $1" >> "$LOGFILE" 2>/dev/null || true
+}
+
+if [ -f "$MARKER" ]; then
+    exit 0
+fi
+
+log "First boot: no registered user, launching wizard before greeter"
+
+COMMON_PASSWORDS="password 12345678 qwerty123 letmein admin123 password123 kali1234 toor123 rootroot iloveyou 11111111 87654321"
+
+zenity --info --title="Kali LiveHunter" \
+    --text="Добро пожаловать. Перед входом в систему нужно создать пользователя." \
+    --width=420
+
+while true; do
+    USERNAME=$(zenity --entry --title="Kali LiveHunter — регистрация" \
+        --text="Введите имя пользователя (латиницей, без пробелов):")
+
+    if [ -z "$USERNAME" ]; then
+        log "Registration cancelled at username step, retrying (mandatory)"
+        continue
+    fi
+
+    if ! [[ "$USERNAME" =~ ^[a-z_][a-z0-9_-]{0,31}$ ]]; then
+        zenity --error --text="Некорректное имя пользователя.\nЛатиница в нижнем регистре, цифры, - и _."
+        continue
+    fi
+
+    if id "$USERNAME" >/dev/null 2>&1; then
+        zenity --error --text="Такой пользователь уже существует. Выберите другое имя."
+        continue
+    fi
+
+    PASSWORD=$(zenity --password --title="Kali LiveHunter — пароль")
+    [ -z "$PASSWORD" ] && continue
+
+    PASSWORD_CONFIRM=$(zenity --password --title="Kali LiveHunter — подтверждение пароля")
+
+    if [ "$PASSWORD" != "$PASSWORD_CONFIRM" ]; then
+        zenity --error --text="Пароли не совпадают. Попробуйте ещё раз."
+        continue
+    fi
+
+    if [ ${#PASSWORD} -lt 8 ]; then
+        zenity --error --text="Пароль слишком короткий (минимум 8 символов)."
+        continue
+    fi
+
+    if [ "${PASSWORD,,}" == "${USERNAME,,}" ]; then
+        zenity --error --text="Пароль не должен совпадать с именем пользователя."
+        continue
+    fi
+
+    PASSWORD_LOWER="${PASSWORD,,}"
+    IS_WEAK=0
+    for weak in $COMMON_PASSWORDS; do
+        [ "$PASSWORD_LOWER" == "$weak" ] && IS_WEAK=1 && break
+    done
+    if [ "$IS_WEAK" -eq 1 ]; then
+        zenity --error --text="Этот пароль слишком распространён. Выберите другой."
+        continue
+    fi
+
+    break
+done
+
+log "Creating user: $USERNAME"
+
+if /usr/local/sbin/livehunter-create-user "$USERNAME" "$PASSWORD"; then
+    log "SUCCESS: $USERNAME registered, proceeding to standard LightDM greeter"
+    zenity --info --title="Готово" \
+        --text="Пользователь $USERNAME создан. Сейчас откроется обычный экран входа." \
+        --width=380
+else
+    log "ERROR: registration failed, retrying wizard on next attempt (marker not set)"
+    zenity --error --text="Не удалось создать пользователя. Экран регистрации откроется снова."
+    exec "$0"
+fi
+
+exit 0

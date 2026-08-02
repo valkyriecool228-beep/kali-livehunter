@@ -143,7 +143,7 @@ lb config noauto \
   --iso-volume "Kali LiveHunter" \
   --linux-packages linux-image \
   --memtest memtest86+ \
-  --bootappend-live "boot=live components quiet splash noeject" \
+  --bootappend-live "boot=live components quiet splash noeject noautologin" \
   --bootappend-live-failsafe "boot=live components noeject memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=normal" \
   --bootappend-install "net.ifnames=0" \
   --security false \
